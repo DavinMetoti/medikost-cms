@@ -1,9 +1,10 @@
 export class FormHandler {
-    constructor(route, formData, formElement, event) {
+    constructor(route, formData, formElement, event, options = {}) {
         this.route = route;
         this.formData = formData;
         this.formElement = formElement;
         this.event = event;
+        this.options = options;
 
         this.submitButton = $(formElement).find('button[type="submit"]');
         this.loadingClass = 'loading';
@@ -58,7 +59,11 @@ export class FormHandler {
             delay: 5000
         });
 
-        $(this.formElement)[0].reset();
+        if (this.options.redirectUrl) {
+            window.location.href = this.options.redirectUrl;
+        } else {
+            $(this.formElement)[0].reset();
+        }
     }
 
     handleError(xhr) {

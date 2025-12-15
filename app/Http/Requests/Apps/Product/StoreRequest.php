@@ -32,7 +32,7 @@ class StoreRequest extends FormRequest
             'stock'             => 'required|integer|min:0',
             'stock_minimum'     => 'nullable|integer|min:0',
             'price'             => 'required|numeric|min:0',
-            'unit'              => 'nullable|string|max:50',
+            'unit_id'           => 'nullable|exists:unit_of_measurements,id',
             'location'          => 'nullable|string',
             'is_active'         => 'nullable|boolean',
             'images'            => 'nullable|json',

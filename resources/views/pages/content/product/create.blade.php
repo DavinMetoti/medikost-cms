@@ -157,13 +157,7 @@
                                     {{-- Unit --}}
                                     <div class="mb-3">
                                         <label for="unit" class="form-label">Unit</label>
-                                        <select class="form-select" id="unit" name="unit" required>
-                                            <option value="" selected disabled>Select Unit</option>
-                                            <option value="pcs">Pcs</option>
-                                            <option value="kg">Kg</option>
-                                            <option value="liters">Liters</option>
-                                            <!-- Add more units as needed -->
-                                        </select>
+                                        <select class="form-select" id="unit" name="unit_id" required></select>
                                     </div>
 
 
@@ -321,6 +315,8 @@
         products: "{{ route('app.products.store') }}",
         categorySelect: "{{ route('app.categories.select') }}",
         supplierSelect: "{{ route('app.suppliers.select') }}",
+        uomSelect: "{{ route('app.uom.select') }}",
+        index: "{{ route('app.products.index') }}",
     };
 
     let editor = null;
@@ -335,6 +331,7 @@
         // Initialize Select2
         initSelect2('#category', urls.categorySelect);
         initSelect2('#supplier', urls.supplierSelect);
+        initSelect2('#unit', urls.uomSelect);
 
         // Initialize Summernote Editor
         if (editor) {
@@ -465,6 +462,7 @@
                         delay: 5000
                     });
                     clearAllFields();
+                    window.location.href = urls.index;
                 },
                 error: function(error) {
                     App.Toast.showToast({
@@ -497,6 +495,7 @@
                         delay: 5000
                     });
                     clearAllFields();
+                    window.location.href = urls.index;
                 },
                 error: function(error) {
                     App.Toast.showToast({
@@ -519,7 +518,7 @@
             formData.append('supplier_id', $('#supplier').val());
             formData.append('price', $('#price').val().replace(/\./g, ''));
             formData.append('purchase_price', $('#purchase_price').val().replace(/\./g, ''));
-            formData.append('unit', $('#unit').val());
+            formData.append('unit_id', $('#unit').val());
             formData.append('stock', $('#stock').val());
             formData.append('stock_minimum', $('#stock_minimum').val());
             formData.append('created_by', "{{ auth()->id() }}"); // Add created_by

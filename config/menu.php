@@ -3,19 +3,42 @@
 return [
     'sidebar' => [
         [
-            'title' => 'Apps',
+            'title' => 'Dashboard',
             'children' => [
                 [
-                    'title' => 'Dashboard',
-                    'icon' => '',
-                    'father' => 'grid',
+                    'title' => 'Overview',
+                    'icon' => 'fas fa-tachometer-alt',
+                    'father' => '',
                     'route' => 'app.dashboard.index',
                 ],
+            ],
+        ],
+        [
+            'title' => 'Inventory Management',
+            'children' => [
                 [
-                    'title' => 'Suppliers',
-                    'icon' => 'fas fa-truck',
+                    'title' => 'Warehouses',
+                    'icon' => 'fas fa-warehouse',
                     'father' => '',
-                    'route' => 'app.suppliers.index',
+                    'route' => 'app.warehouses.index',
+                ],
+                [
+                    'title' => 'Locations Type',
+                    'icon' => 'fas fa-boxes',
+                    'father' => '',
+                    'route' => 'app.location-types.index',
+                ],
+                [
+                    'title' => 'Locations',
+                    'icon' => 'fas fa-map-marker-alt',
+                    'father' => '',
+                    'route' => 'app.locations.index',
+                ],
+                [
+                    'title' => 'Products',
+                    'icon' => 'fas fa-box-open',
+                    'father' => '',
+                    'route' => 'app.products.index',
                 ],
                 [
                     'title' => 'Categories',
@@ -24,10 +47,16 @@ return [
                     'route' => 'app.categories.index',
                 ],
                 [
-                    'title' => 'Products',
-                    'icon' => 'fas fa-box',
+                    'title' => 'Suppliers',
+                    'icon' => 'fas fa-truck',
                     'father' => '',
-                    'route' => 'app.products.index',
+                    'route' => 'app.suppliers.index',
+                ],
+                [
+                    'title' => 'Units of Measurement',
+                    'icon' => 'fas fa-ruler-combined',
+                    'father' => '',
+                    'route' => 'app.uom.index',
                 ],
             ],
         ],
@@ -35,8 +64,8 @@ return [
             'title' => 'User Management',
             'children' => [
                 [
-                    'title' => 'User',
-                    'icon' => 'fas fa-users-cog', // Ikon manajemen pengguna
+                    'title' => 'Users',
+                    'icon' => 'fas fa-users',
                     'father' => '',
                     'route' => 'user-management.users.index',
                 ],

@@ -24,11 +24,11 @@ class UpdateRequest extends FormRequest
         return [
             'name'              => 'required|string|max:255|unique:products,name,' . $productId,
             'barcode'           => 'nullable|string|max:100|unique:products,barcode,' . $productId,
-            'description'       => 'nullable|string|max:500',
+            'description'       => 'nullable|string',
             'price'             => 'required|numeric|min:0',
             'stock'             => 'required|integer|min:0',
             'stock_minimum'     => 'nullable|integer|min:0',
-            'unit'              => 'nullable|string|max:50',
+            'unit_id'           => 'nullable|exists:unit_of_measurements,id',
             'location'          => 'nullable|string',
             'category_id'       => 'required|exists:categories,id',
             'supplier_id'       => 'nullable|exists:suppliers,id',

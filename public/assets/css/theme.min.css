@@ -28424,17 +28424,18 @@ html:not(.navbar-vertical-collapsed) .navbar-vertical.navbar-expand-xs .navbar-v
   padding-left: 1.5rem;
   margin-bottom: 5px;
   white-space: nowrap;
-  color: var(--phoenix-navbar-vertical-link-color);
+  color: var(--phoenix-nav-vertical-color-global);
 }
 .navbar-vertical .navbar-vertical-content .navbar-nav .nav-link.dropdown-indicator {
   padding-left: 0.75rem;
 }
 .navbar-vertical .navbar-vertical-content .navbar-nav .nav-link:hover {
-  color: var(--phoenix-navbar-vertical-link-hover-color);
+  color: var(--phoenix-nav-vertical-color-global);
 }
 .navbar-vertical .navbar-vertical-content .navbar-nav .nav-link.active {
-  color: var(--phoenix-navbar-vertical-link-active-color);
-  border: 2px solid var(--phoenix-blue);
+  color: var(--phoenix-navbar-vertical-link-hover-bg);
+  background: var(--phoenix-nav-vertical-color-global);
+  /* border: 2px solid var(--phoenix-blue); */
   border-radius: 7px;
 }
 .navbar-vertical .navbar-vertical-content .navbar-nav .nav-link.nav-link-disable {
@@ -28572,7 +28573,7 @@ html:not(.navbar-vertical-collapsed) .navbar-vertical.navbar-expand-xs .navbar-v
 .table-list .navbar-vertical .navbar-vertical-footer .page:hover, .navbar-vertical .navbar-vertical-footer .tox .tox-button:hover, .tox .navbar-vertical .navbar-vertical-footer .tox-button:hover, .navbar-vertical .navbar-vertical-footer .tox .tox-button-secondary:hover, .tox .navbar-vertical .navbar-vertical-footer .tox-button-secondary:hover, .navbar-vertical .navbar-vertical-footer .tox .tox-dialog__footer .tox-button--secondary:hover, .tox .tox-dialog__footer .navbar-vertical .navbar-vertical-footer .tox-button--secondary:hover, .navbar-vertical .navbar-vertical-footer .google-map-control-btn .zoomIn:hover, .google-map-control-btn .navbar-vertical .navbar-vertical-footer .zoomIn:hover,
 .navbar-vertical .navbar-vertical-footer .google-map-control-btn .zoomOut:hover,
 .google-map-control-btn .navbar-vertical .navbar-vertical-footer .zoomOut:hover {
-  color: var(--phoenix-navbar-vertical-link-hover-color);
+  color: var(--phoenix-nav-vertical-color-global);
 }
 @media (min-width: 1540px) {
   .navbar-vertical.navbar-expand-xxl {
@@ -28612,7 +28613,7 @@ html:not(.navbar-vertical-collapsed) .navbar-vertical.navbar-expand-xs .navbar-v
   .navbar-vertical.navbar-expand-xxl .navbar-vertical-content .navbar-nav .nav-link {
     padding-top: 0.35rem;
     padding-bottom: 0.35rem;
-    padding-left: 1.75rem;
+    /* padding-left: 1.75rem; */
     margin-left: 0.75rem;
     margin-right: 0.75rem;
     border-radius: 0.5rem;
@@ -28621,7 +28622,7 @@ html:not(.navbar-vertical-collapsed) .navbar-vertical.navbar-expand-xs .navbar-v
     padding-left: 1rem;
   }
   .navbar-vertical.navbar-expand-xxl .navbar-vertical-content .navbar-nav .nav-link:hover {
-    background-color: var(--phoenix-navbar-vertical-link-hover-bg);
+    background-color: var(--phoenix-nav-vertical-color-global);
   }
   .navbar-vertical.navbar-expand-xxl .navbar-vertical-content .navbar-nav .nav .nav-link {
     padding-left: 3.3125rem;
@@ -28789,7 +28790,8 @@ html:not(.navbar-vertical-collapsed) .navbar-vertical.navbar-expand-xs .navbar-v
     padding-left: 1rem;
   }
   .navbar-vertical.navbar-expand-lg .navbar-vertical-content .navbar-nav .nav-link:hover {
-    background-color: var(--phoenix-navbar-vertical-link-hover-bg);
+    background-color: var(--phoenix-nav-vertical-color-global);
+    color: var(--phoenix-navbar-vertical-link-hover-bg);
   }
   .navbar-vertical.navbar-expand-lg .navbar-vertical-content .navbar-nav .nav .nav-link {
     padding-left: 3.3125rem;

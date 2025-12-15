@@ -17,8 +17,8 @@ return new class extends Migration
                 $table->string('name');
                 $table->string('sku')->unique();
                 $table->string('barcode')->nullable()->index();
-                $table->unsignedBigInteger('category_id')->index();
-                $table->unsignedBigInteger('supplier_id')->index();
+                $table->unsignedBigInteger('category_id')->nullable()->index();
+                $table->unsignedBigInteger('supplier_id')->nullable()->index();
                 $table->json('tag')->nullable();
                 $table->text('description')->nullable();
                 $table->integer('stock')->default(0);
@@ -31,8 +31,8 @@ return new class extends Migration
                 $table->json('specifications')->nullable();
                 $table->boolean('is_published')->default(false);
                 $table->timestamps();
-                $table->unsignedBigInteger('created_by');
-                $table->unsignedBigInteger('updated_by');
+                $table->unsignedBigInteger('created_by')->nullable();
+                $table->unsignedBigInteger('updated_by')->nullable();
 
                 // Foreign key constraints
                 $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');

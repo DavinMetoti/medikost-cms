@@ -15,7 +15,7 @@ class ProductRepository implements ProductRepositoryInterface
         return Product::create($data);
     }
 
-    public function update(int $id, array $data)
+    public function update(string $id, array $data)
     {
         $product = Product::findOrFail($id);
 
@@ -24,7 +24,7 @@ class ProductRepository implements ProductRepositoryInterface
         return $product;
     }
 
-    public function delete(int $id)
+    public function delete(string $id)
     {
         $product = Product::findOrFail($id);
 
@@ -34,7 +34,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function datatable(Request $request)
     {
-        $query = Product::with('supplier', 'category');
+        $query = Product::with('supplier', 'category', 'unitOfMeasurement');
 
         // Apply filter based on is_published if provided
         if ($request->has('filter')) {
@@ -49,9 +49,9 @@ class ProductRepository implements ProductRepositoryInterface
         return DataTables::of($query)->make(true);
     }
 
-    public function find(int $id)
+    public function find(string $id)
     {
-        return Product::with('supplier','category')->find($id);
+        return Product::with('supplier','category', 'unitOfMeasurement')->find($id);
     }
 
     public function countAll()

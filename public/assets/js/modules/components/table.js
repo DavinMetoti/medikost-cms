@@ -155,7 +155,9 @@ export class TableManager {
             delay: 5000
         });
 
-        $(this.formElement)[0].reset();
+        if (this.formElement) {
+            $(this.formElement)[0].reset();
+        }
     }
 
     handleError(xhr) {

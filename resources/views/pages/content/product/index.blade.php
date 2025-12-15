@@ -46,6 +46,7 @@
                             <th>Category</th>
                             <th>Price</th>
                             <th>Stock</th>
+                            <th>UOM</th>
                             <th>Supplier</th>
                             <th class="text-center">Tags</th>
                             <th class="text-center">Status</th>
@@ -132,6 +133,7 @@
                                 return `<a href="${urls.productsApi}/${row.id}">${data}</a>`; }
                             },
                         { data: 'sku', name: 'sku' },
+                        { data: 'category.name', name: 'category.name' },
                         {
                             data: 'price',
                             name: 'price',
@@ -139,8 +141,8 @@
                                 return `Rp ${parseFloat(data).toLocaleString('id-ID')}`;
                             }
                         },
-                        { data: 'category.name', name: 'category.name' },
                         { data: 'stock', name: 'stock' },
+                        { data: 'unit_of_measurement.abbreviation', name: 'unit_of_measurement.abbreviation' },
                         { data: 'supplier.name', name: 'supplier.name' },
                         {
                             data: 'tag',

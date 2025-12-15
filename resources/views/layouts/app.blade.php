@@ -74,8 +74,13 @@
         window.addEventListener('load', function () {
             NProgress.done();
 
-            document.getElementById('skeleton-loader').style.display = 'none';
-            document.getElementById('actual-content').style.display = 'block';
+            const skeleton = document.getElementById('skeleton-loader');
+            const content = document.getElementById('actual-content');
+
+            if(skeleton && content) {
+                skeleton.style.display = 'none';
+                content.style.display = 'block';
+            }
         });
 
         $(document).ready(function () {

@@ -44,18 +44,18 @@
         $(document).ready(function () {
             const categoryId = @json($category->id);
             let urls = {
-                categories: "{{ route('app.categories.update', ['category' => '__CATEGORY_ID__']) }}".replace('__CATEGORY_ID__', categoryId)
+                categories: "{{ route('app.categories.update', ['category' => '__CATEGORY_ID__']) }}".replace('__CATEGORY_ID__', categoryId),
+                index: "{{ route('app.categories.index') }}",
             };
             $('#category-edit-form').on('submit', function (e) {
                 e.preventDefault();
 
                 let formData = new FormData(this);
-                let formHandler = new App.Form(urls.categories, formData, this, e);
+                let formHandler = new App.Form(urls.categories, formData, this, e, { redirectUrl: urls.index });
 
                     formHandler.sendRequest()
                         .then(response => {
                             console.log("Success:", response);
-                            window.location.reload();
                         })
                         .catch(error => {
                             console.log("Error:", error);

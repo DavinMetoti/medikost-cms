@@ -17,19 +17,19 @@ interface ProductRepositoryInterface
     /**
      * Update an existing prodyct.
      *
-     * @param int $id
+     * @param string $id
      * @param array $data
      * @return \App\Models\Product
      */
-    public function update(int $id, array $data);
+    public function update(string $id, array $data);
 
     /**
      * Delete a prodyct.
      *
-     * @param int $id
+     * @param string $id
      * @return bool
      */
-    public function delete(int $id);
+    public function delete(string $id);
 
     /**
      * Get datatable data.
@@ -42,10 +42,10 @@ interface ProductRepositoryInterface
     /**
      * Find a Product by ID.
      *
-     * @param int $id
+     * @param string $id
      * @return \App\Models\Product|null
      */
-    public function find(int $id);
+    public function find(string $id);
 
     /**
      * Count all products.

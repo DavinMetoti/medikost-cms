@@ -41,6 +41,7 @@
     <script>
         let urls = {
             users : "{{ route('app.categories.store') }}",
+            index: "{{ route('app.categories.index') }}",
         }
 
         $(document).ready(function () {
@@ -48,7 +49,7 @@
                 e.preventDefault();
 
                 let formData = new FormData(this);
-                let formHandler = new App.Form(urls.users, formData, this, e);
+                let formHandler = new App.Form(urls.users, formData, this, e, { redirectUrl: urls.index });
 
                 formHandler.sendRequest()
                     .then(response => {

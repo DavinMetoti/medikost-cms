@@ -80,6 +80,7 @@
     <script>
         let urls = {
             suppliers: "{{ route('app.suppliers.store') }}",
+            index: "{{ route('app.suppliers.index') }}",
         };
 
         $(document).ready(function () {
@@ -120,7 +121,7 @@
                 }
 
                 function sendFormData(formData) {
-                    let formHandler = new App.Form(urls.suppliers, formData, this, e);
+                    let formHandler = new App.Form(urls.suppliers, formData, this, e, { redirectUrl: urls.index });
 
                     formHandler.sendRequest()
                         .then(response => {
