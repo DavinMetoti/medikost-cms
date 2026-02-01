@@ -11,58 +11,31 @@ class Product extends Model
 
     protected $fillable = [
         'name',
-        'sku',
-        'barcode',
-        'category_id',
-        'supplier_id',
-        'tag',
+        'address',
+        'distance_to_kariadi',
+        'whatsapp',
         'description',
-        'stock',
-        'stock_minimum',
-        'price',
-        'unit_id',
-        'location',
+        'facilities',
+        'google_maps_link',
         'is_active',
-        'images',
-        'specifications',
         'is_published',
+        'images',
+        'category',
         'created_by',
         'updated_by',
     ];
 
     protected $casts = [
-        'price' => 'float',
-        'stock' => 'integer',
-        'stock_minimum' => 'integer',
+        'facilities' => 'array',
+        'images' => 'array',
+        'distance_to_kariadi' => 'decimal:2',
         'is_active' => 'boolean',
-        'unit' => 'string', // Added unit cast
+        'is_published' => 'boolean',
     ];
 
-    public function category()
+    public function productDetails()
     {
-        return $this->belongsTo(Category::class);
-    }
-
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class);
-    }
-
-    public function unitOfMeasurement()
-    {
-        return $this->belongsTo(UnitOfMeasurement::class, 'unit_id');
-    }
-
-    public function getFormattedPriceAttribute()
-    {
-        return number_format($this->price, 2, ',', '.');
-    }
-
-    public function getImageSrcAttribute()
-    {
-        return $this->images
-            ? 'data:image/jpeg;base64,' . $this->images
-            : null;
+        return $this->hasMany(ProductDetail::class);
     }
 
     public function creator()

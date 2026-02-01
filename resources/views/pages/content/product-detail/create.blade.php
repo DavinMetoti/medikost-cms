@@ -2,19 +2,19 @@
 
 @section('main')
 <x-breadcrumb :items="[
-        ['title' => 'Product Management', 'url' => route('app.products.index')],
+        ['title' => 'Product Detail Management', 'url' => route('app.product-details.index')],
         ['title' => 'Create', 'url' => '#']
     ]" />
 <div class="row align-items-center justify-content-between g-3">
     <div class="col-auto">
-        <h3>Register a New Product</h3>
-        <p>Fill in the form to create a new product account.</p>
+        <h3>Create Product Detail</h3>
+        <p>Add a new product detail.</p>
     </div>
     <div class="col-auto">
         <div class="row g-2 g-sm-3">
             <div class="col-auto"><button class="btn btn-phoenix-danger" id="discard-btn"><span class="fas fa-trash-alt me-2"></span>Discard</button></div>
-            <div class="col-auto"><button class="btn btn-secondary" id="draft-btn"><span class="fas fa-folder-open me-2"></span>Save Draf</button></div>
-            <div class="col-auto"><button class="btn btn-primary" id="submit-btn"><span class="fas fa-check me-2"></span>Publish Product</button></div>
+            <div class="col-auto"><button class="btn btn-secondary" id="draft-btn"><span class="fas fa-folder-open me-2"></span>Save Draft</button></div>
+            <div class="col-auto"><button class="btn btn-primary" id="submit-btn"><span class="fas fa-check me-2"></span>Publish Detail</button></div>
         </div>
     </div>
 </div>
@@ -22,43 +22,44 @@
     <div class="col-md-7">
         <div class="card mb-3">
             <div class="card-header pb-0">
-                <h5>Product</h5>
+                <h5>Detail Information</h5>
             </div>
             <div class="card-body">
                 <div id="responseMessage"></div>
 
-                {{-- Product Name --}}
+                {{-- Product --}}
                 <div class="mb-3">
-                    <label for="name" class="form-label">Product Name</label>
-                    <input class="form-control" type="text" id="name" name="name" placeholder="Your Product Name" required>
-                </div>
-
-                {{-- Category --}}
-                <div class="mb-3">
-                    <label for="category" class="form-label">Category</label>
-                    <select class="form-control" id="category" name="category" required>
-                        <option value="Campur">Campur</option>
-                        <option value="Putri">Putri</option>
-                        <option value="Putra">Putra</option>
+                    <label for="product_id" class="form-label">Product</label>
+                    <select class="form-select" id="product_id" name="product_id" required>
+                        <option value="">Select Product</option>
                     </select>
                 </div>
 
-                {{-- Address --}}
+                {{-- Room Name --}}
                 <div class="mb-3">
-                    <label for="address" class="form-label">Address</label>
-                    <textarea class="form-control" id="address" name="address" placeholder="Product Address" rows="3"></textarea>
+                    <label for="room_name" class="form-label">Room Name</label>
+                    <input class="form-control" type="text" id="room_name" name="room_name" placeholder="Room Name" required>
                 </div>
 
-                {{-- Distance to Kariadi --}}
+                {{-- Price --}}
                 <div class="mb-3">
-                    <label for="distance_to_kariadi" class="form-label">Distance to Kariadi (km)</label>
-                    <input class="form-control" type="number" step="0.01" id="distance_to_kariadi" name="distance_to_kariadi" placeholder="Distance in km">
+                    <label for="price" class="form-label">Price</label>
+                    <input class="form-control currency" type="text" id="price" name="price" placeholder="Price" required>
                 </div>
 
-                {{-- Whatsapp --}}
+                {{-- Status --}}
                 <div class="mb-3">
-                    <label for="whatsapp" class="form-label">Whatsapp</label>
-                    <input class="form-control" type="text" id="whatsapp" name="whatsapp" placeholder="Whatsapp number">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="kosong">Kosong</option>
+                        <option value="isi">Isi</option>
+                    </select>
+                </div>
+
+                {{-- Available Rooms --}}
+                <div class="mb-3">
+                    <label for="available_rooms" class="form-label">Jumlah Kamar Tersedia</label>
+                    <input class="form-control" type="number" id="available_rooms" name="available_rooms" placeholder="Jumlah Kamar Tersedia">
                 </div>
 
                 {{-- Description --}}
@@ -67,24 +68,16 @@
                     <div id="description" class="form-control" style="min-height: 200px;"></div>
                 </div>
 
-                {{-- Google Maps Link --}}
+                {{-- Is Active --}}
                 <div class="mb-3">
-                    <label for="google_maps_link" class="form-label">Google Maps Link</label>
-                    <input class="form-control" type="url" id="google_maps_link" name="google_maps_link" placeholder="https://maps.google.com/...">
-                </div>
-
-                {{-- Price --}}
-                <div class="mb-3">
-                    <label for="price" class="form-label">Price</label>
-                    <div class="input-group">
-                        <span class="input-group-text">Rp</span>
-                        <input class="form-control currency" type="text" id="price" name="price" placeholder="Product Price" aria-label="Amount (to the nearest dollar)">
-                        <span class="input-group-text">.00</span>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active" checked>
+                        <label class="form-check-label" for="is_active">Is Active</label>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card mb-3">
+        <div class="card">
             <div class="card-header pb-0">
                 <h5>Facilities</h5>
             </div>
@@ -93,10 +86,10 @@
                     <!-- Default headers -->
                     <div class="facility-header mb-3 border p-3 rounded bg-light">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <input type="text" class="form-control fw-bold header-input bg-white" placeholder="Header" value="Peraturan Kost">
+                            <input type="text" class="form-control fw-bold header-input bg-white" placeholder="Header" value="Spesifikasi tipe kamar">
                         </div>
                         <div class="items-container">
-                            <!-- Items will be added here -->
+                            <!-- Items -->
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <button class="btn btn-secondary btn-sm add-item">Add Item</button>
@@ -105,10 +98,10 @@
                     </div>
                     <div class="facility-header mb-3 border p-3 rounded bg-light">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <input type="text" class="form-control fw-bold header-input bg-white" placeholder="Header" value="Fasilitas umum">
+                            <input type="text" class="form-control fw-bold header-input bg-white" placeholder="Header" value="Fasilitas kamar">
                         </div>
                         <div class="items-container">
-                            <!-- Items will be added here -->
+                            <!-- Items -->
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <button class="btn btn-secondary btn-sm add-item">Add Item</button>
@@ -117,10 +110,10 @@
                     </div>
                     <div class="facility-header mb-3 border p-3 rounded bg-light">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <input type="text" class="form-control fw-bold header-input bg-white" placeholder="Header" value="Fasilitas parkir">
+                            <input type="text" class="form-control fw-bold header-input bg-white" placeholder="Header" value="Fasilitas kamar mandi">
                         </div>
                         <div class="items-container">
-                            <!-- Items will be added here -->
+                            <!-- Items -->
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <button class="btn btn-secondary btn-sm add-item">Add Item</button>
@@ -129,10 +122,10 @@
                     </div>
                     <div class="facility-header mb-3 border p-3 rounded bg-light">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <input type="text" class="form-control fw-bold header-input bg-white" placeholder="Header" value="Ketentuan pengajuan sewa">
+                            <input type="text" class="form-control fw-bold header-input bg-white" placeholder="Header" value="Peraturan khusus tipe kamar">
                         </div>
                         <div class="items-container">
-                            <!-- Items will be added here -->
+                            <!-- Items -->
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <button class="btn btn-secondary btn-sm add-item">Add Item</button>
@@ -140,7 +133,7 @@
                         </div>
                     </div>
                 </div>
-                <button id="add-header" class="btn btn-primary mt-3">Add Header</button>
+                <button type="button" id="add-header" class="btn btn-primary mt-3">Add Header</button>
             </div>
         </div>
     </div>
@@ -183,7 +176,6 @@
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -192,11 +184,8 @@
 {{-- JS Section --}}
 <script>
     let urls = {
-        products: "{{ route('app.products.store') }}",
-        categorySelect: "{{ route('app.categories.select') }}",
-        supplierSelect: "{{ route('app.suppliers.select') }}",
-        uomSelect: "{{ route('app.uom.select') }}",
-        index: "{{ route('app.products.index') }}",
+        productDetails: "{{ route('app.product-details.store') }}",
+        index: "{{ route('app.product-details.index') }}",
     };
 
     let editor = null;
@@ -207,14 +196,21 @@
         }
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         // Initialize Summernote Editor
         if (editor) {
             editor.destroy();
         }
         editor = new App.SummernoteEditor('#description');
 
-        // Facilities functionality
+        // Initialize Select2 for Product
+        const productSelect = new App.Select2Wrapper('#product_id', {
+            ajax: '{{ route("app.products.search") }}',
+            placeholder: 'Cari produk...',
+            allowClear: true
+        });
+
+        // Add header
         $('#add-header').on('click', function() {
             const headerHtml = `
                 <div class="facility-header mb-3 border p-3 rounded bg-light">
@@ -222,7 +218,7 @@
                         <input type="text" class="form-control fw-bold header-input bg-white" placeholder="Header">
                     </div>
                     <div class="items-container">
-                        <!-- Items will be added here -->
+                        <!-- Items -->
                     </div>
                     <div class="d-flex justify-content-between mt-2">
                         <button class="btn btn-secondary btn-sm add-item">Add Item</button>
@@ -234,71 +230,50 @@
         });
 
         $('#facilities-container').on('click', '.add-item', function() {
-            const container = $(this).closest('.facility-header').find('.items-container');
-            const itemCount = container.find('.item-input').length + 1;
             const itemHtml = `
-                <div class="d-flex align-items-center mb-1">
-                    <span class="item-number me-2">${itemCount}.</span>
-                    <input type="text" class="form-control item-input" placeholder="Item">
-                    <button class="btn btn-danger btn-sm remove-item ms-2">Remove</button>
+                <div class="facility-item mb-2 d-flex align-items-center">
+                    <input type="text" class="form-control me-2 item-input" placeholder="Item">
+                    <button class="btn btn-danger btn-sm remove-item">Remove</button>
                 </div>
             `;
-            container.append(itemHtml);
+            $(this).closest('.facility-header').find('.items-container').append(itemHtml);
+        });
+
+        $('#facilities-container').on('click', '.remove-item', function() {
+            $(this).closest('.facility-item').remove();
         });
 
         $('#facilities-container').on('click', '.remove-header', function() {
             $(this).closest('.facility-header').remove();
         });
 
-        $('#facilities-container').on('click', '.remove-item', function() {
-            const container = $(this).closest('.items-container');
-            $(this).closest('.d-flex').remove();
-            updateItemNumbers(container);
-        });
-
-        function updateItemNumbers(container) {
-            container.find('.item-number').each(function(index) {
-                $(this).text((index + 1) + '.');
-            });
-        }
-
         // Submit button functionality
-        $('#submit-btn').on('click', function() {
-            // Validate minimum 3 images
-            if (Dropzone.instances.length === 0 || Dropzone.instances[0].files.length < 3) {
-                App.Toast.showToast({
-                    title: 'Error',
-                    message: 'Please upload at least 3 images.',
-                    type: 'danger',
-                    delay: 5000
-                });
-                return;
-            }
-
+        $('#submit-btn').on('click', function () {
             const formData = new FormData();
-            formData.append('is_published', 1); // Set is_published to 1
+            formData.append('is_active', 1);
             appendFormData(formData);
 
             $.ajax({
-                url: urls.products,
+                url: urls.productDetails,
                 method: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(response) {
+                success: function (response) {
                     App.Toast.showToast({
                         title: 'Success',
-                        message: 'Product published successfully!',
+                        message: 'Product Detail created successfully!',
                         type: 'success',
                         delay: 5000
                     });
-                    clearAllFields();
-                    window.location.href = urls.index;
+                    setTimeout(function () {
+                        window.location.href = urls.index;
+                    }, 2000);
                 },
-                error: function(error) {
+                error: function (error) {
                     App.Toast.showToast({
                         title: 'Error',
-                        message: error.responseJSON.message || 'An error occurred while publishing the product.',
+                        message: error.responseJSON.message || 'An error occurred.',
                         type: 'danger',
                         delay: 5000
                     });
@@ -307,42 +282,32 @@
         });
 
         // Draft button functionality
-        $('#draft-btn').on('click', function() {
-            // Validate minimum 3 images
-            if (Dropzone.instances.length === 0 || Dropzone.instances[0].files.length < 3) {
-                App.Toast.showToast({
-                    title: 'Error',
-                    message: 'Please upload at least 3 images.',
-                    type: 'danger',
-                    delay: 5000
-                });
-                return;
-            }
-
+        $('#draft-btn').on('click', function () {
             const formData = new FormData();
-            formData.append('is_published', 0); // Set is_published to 0
+            formData.append('is_active', 0);
             appendFormData(formData);
 
             $.ajax({
-                url: urls.products,
+                url: urls.productDetails,
                 method: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(response) {
+                success: function (response) {
                     App.Toast.showToast({
                         title: 'Success',
-                        message: 'Product saved as draft successfully!',
+                        message: 'Product Detail saved as draft!',
                         type: 'success',
                         delay: 5000
                     });
-                    clearAllFields();
-                    window.location.href = urls.index;
+                    setTimeout(function () {
+                        window.location.href = urls.index;
+                    }, 2000);
                 },
-                error: function(error) {
+                error: function (error) {
                     App.Toast.showToast({
                         title: 'Error',
-                        message: error.responseJSON.message || 'An error occurred while saving the draft.',
+                        message: error.responseJSON.message || 'An error occurred.',
                         type: 'danger',
                         delay: 5000
                     });
@@ -352,26 +317,25 @@
 
         // Helper function to append form data
         function appendFormData(formData) {
-            formData.append('name', $('#name').val());
-            formData.append('category', $('#category').val());
-            formData.append('address', $('#address').val());
-            formData.append('distance_to_kariadi', $('#distance_to_kariadi').val());
-            formData.append('whatsapp', $('#whatsapp').val());
+            formData.append('product_id', $('#product_id').val());
+            formData.append('room_name', $('#room_name').val());
+            formData.append('price', $('#price').val().replace(/\./g, ''));
+            formData.append('status', $('#status').val());
+            formData.append('available_rooms', $('#available_rooms').val());
             formData.append('description', editor.getHtml());
-            const facilities = [];
-        $('#facilities-container .facility-header').each(function() {
-            const header = $(this).find('.header-input').val();
-            const items = $(this).find('.item-input').map(function() { return $(this).val(); }).get();
-            facilities.push({header: header, items: items});
-        });
-        formData.append('facilities', JSON.stringify(facilities));
-            formData.append('google_maps_link', $('#google_maps_link').val());
-            formData.append('price', $('#price').val().replace(/\./g, '').replace(/\$/g, ''));
-            formData.append('is_active', 1);
-            formData.append('created_by', "{{ auth()->id() }}");
-            formData.append('updated_by', "{{ auth()->id() }}");
 
-            // Append images and collect their names
+            // Append facilities
+            const facilities = [];
+            $('#facilities-container .facility-header').each(function() {
+                const header = $(this).find('.header-input').val();
+                const items = $(this).find('.item-input').map(function() { return $(this).val(); }).get().filter(item => item.trim() !== '');
+                if (header.trim() !== '' || items.length > 0) {
+                    facilities.push({header: header, items: items});
+                }
+            });
+            formData.append('facilities', JSON.stringify(facilities));
+
+            // Append images
             const imageNames = [];
             if (Dropzone.instances.length > 0) {
                 const dropzoneFiles = Dropzone.instances[0].files;
@@ -381,42 +345,6 @@
                 });
             }
             formData.append('images', JSON.stringify(imageNames));
-        }
-
-        // Discard button
-        $('#discard-btn').on('click', function() {
-            $.confirm({
-                title: 'Confirm!',
-                content: 'Are you sure you want to discard changes?',
-                theme: 'bootstrap',
-                buttons: {
-                    confirm: function () {
-                        clearAllFields();
-                        $('#responseMessage').html('');
-                        App.Toast.showToast({
-                            title: 'Success',
-                            message: 'Changes discarded successfully!',
-                            type: 'success',
-                            delay: 5000
-                        });
-                    },
-                    cancel: function () {
-
-                    },
-                }
-            });
-        });
-
-        // Helper to clear all fields
-        function clearAllFields() {
-            $('#name, #address, #distance_to_kariadi, #whatsapp, #google_maps_link, #price').val('');
-            $('#facilities').val('[]');
-            editor.setContent('');
-
-            // Clear Dropzone files
-            if (Dropzone.instances.length > 0) {
-                Dropzone.instances.forEach(instance => instance.removeAllFiles(true));
-            }
         }
     });
 </script>

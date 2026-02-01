@@ -22,22 +22,19 @@ class UpdateRequest extends FormRequest
         $productId = $this->route('product'); // pastikan route model bindingnya benar
 
         return [
-            'name'              => 'required|string|max:255|unique:products,name,' . $productId,
-            'barcode'           => 'nullable|string|max:100|unique:products,barcode,' . $productId,
-            'description'       => 'nullable|string',
-            'price'             => 'required|numeric|min:0',
-            'stock'             => 'required|integer|min:0',
-            'stock_minimum'     => 'nullable|integer|min:0',
-            'unit_id'           => 'nullable|exists:unit_of_measurements,id',
-            'location'          => 'nullable|string',
-            'category_id'       => 'required|exists:categories,id',
-            'supplier_id'       => 'nullable|exists:suppliers,id',
-            'tag'               => 'nullable|json',
-            'images'            => 'nullable|json',
-            'specifications'    => 'nullable|json',
-            'is_published'      => 'nullable|boolean',
-            'is_active'         => 'nullable|boolean',
-            'updated_by'        => 'required|exists:users,id',
+            'name' => 'required|string|max:255|unique:products,name,' . $productId,
+            'category' => 'required|in:Campur,Putri,Putra',
+            'address' => 'nullable|string',
+            'distance_to_kariadi' => 'nullable|numeric|min:0|max:999.99',
+            'whatsapp' => 'nullable|string|max:20',
+            'description' => 'nullable|string',
+            'facilities' => 'nullable|json',
+            'google_maps_link' => 'nullable|string|url',
+            'is_active' => 'nullable|boolean',
+            'is_published' => 'nullable|boolean',
+            'images' => 'nullable|json',
+            'removed_images' => 'nullable|json',
+            'updated_by' => 'required|exists:users,id',
         ];
     }
 }

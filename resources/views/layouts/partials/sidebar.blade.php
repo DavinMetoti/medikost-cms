@@ -10,6 +10,7 @@
                         <hr class="navbar-vertical-line" />
 
                         @foreach ($group['children'] as $menu)
+                            @can($menu['permission'] ?? null)
                             <div class="nav-item-wrapper">
                                 <a class="nav-link label-1 {{ request()->routeIs($menu['route']) ? 'active' : '' }}"
                                 href="{{ route($menu['route']) }}"
@@ -28,6 +29,7 @@
                                     </div>
                                 </a>
                             </div>
+                            @endcan
                         @endforeach
                     </li>
                 @endforeach

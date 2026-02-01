@@ -10,7 +10,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h3>Product Management</h3>
-                    <p>Manage your product inventory, categories, and suppliers efficiently.</p>
+                    <p>Manage your kost listings efficiently.</p>
                 </div>
                 <button class="btn btn-primary" id="btn-product-add"><i class="fas fa-plus me-2"></i>Add New Product</button>
             </div>
@@ -40,16 +40,15 @@
                 <table id="product_table" class="table table-sm table-striped fs-9 mb-0 custom-table">
                     <thead>
                         <tr>
+                            <th>No</th>
                             <th>Image</th>
                             <th>Name</th>
-                            <th>SKU</th>
                             <th>Category</th>
-                            <th>Price</th>
-                            <th>Stock</th>
-                            <th>UOM</th>
-                            <th>Supplier</th>
-                            <th class="text-center">Tags</th>
-                            <th class="text-center">Status</th>
+                            <th>Address</th>
+                            <th>Distance to Kariadi</th>
+                            <th>Whatsapp</th>
+                            <th>Jumlah Kamar</th>
+                            <th>Status</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -108,9 +107,20 @@
                     api: urls.productsApi,
                     columns: [
                         {
+                            data: null,
+                            name: 'no',
+                            orderable: false,
+                            searchable: false,
+                            width: '5%',
+                            render: function (data, type, row, meta) {
+                                return meta.row + 1;
+                            }
+                        },
+                        {
                             data: 'images',
                             name: 'images',
                             orderable: false,
+                            searchable: false,
                             render: function (data) {
                                 if (!data) return '<div class="text-center">-</div>';
                                 try {
@@ -130,33 +140,26 @@
                             data: 'name',
                             name: 'name',
                             render: function (data, type, row) {
-                                return `<a href="${urls.productsApi}/${row.id}">${data}</a>`; }
-                            },
-                        { data: 'sku', name: 'sku' },
-                        { data: 'category.name', name: 'category.name' },
-                        {
-                            data: 'price',
-                            name: 'price',
-                            render: function (data) {
-                                return `Rp ${parseFloat(data).toLocaleString('id-ID')}`;
+                                return `<a href="${urls.productsApi}/${row.id}">${data}</a>`;
                             }
                         },
-                        { data: 'stock', name: 'stock' },
-                        { data: 'unit_of_measurement.abbreviation', name: 'unit_of_measurement.abbreviation' },
-                        { data: 'supplier.name', name: 'supplier.name' },
+                        { data: 'category', name: 'category' },
+                        { data: 'address', name: 'address' },
                         {
-                            data: 'tag',
-                            name: 'tag',
-                            orderable: false,
+                            data: 'distance_to_kariadi',
+                            name: 'distance_to_kariadi',
                             render: function (data) {
-                                if (!data) return '<div class="">-</div>';
-                                try {
-                                    const tags = JSON.parse(data.replace(/&quot;/g, '"')); // Fix JSON parsing
-                                    return tags.map(tag => `<span class="badge badge-phoenix badge-phoenix-primary me-1">${tag}</span>`).join('');
-                                } catch (e) {
-                                    console.error('Invalid JSON for tags:', data);
-                                    return '<div class="text-center text-danger">Invalid Tags</div>';
-                                }
+                                return data ? `${data} km` : '-';
+                            }
+                        },
+                        { data: 'whatsapp', name: 'whatsapp' },
+                        {
+                            data: 'product_details',
+                            name: 'product_details',
+                            orderable: false,
+                            searchable: false,
+                            render: function (data) {
+                                return data ? data.length : 0;
                             }
                         },
                         {
@@ -164,10 +167,10 @@
                             name: 'is_published',
                             orderable: false,
                             width: '10%',
-                            render: function (data) {
-                                return data === 1
-                                    ? '<div class="text-center"><span class="badge bg-success">Published</span></div>'
-                                    : '<div class="text-center"><span class="badge bg-secondary">Draft</span></div>';
+                            render: function (data, type, row) {
+                                const published = data ? 'Published' : 'Draft';
+                                const badgeClass = data ? 'success' : 'warning';
+                                return `<div class="text-center"><span class="badge bg-${badgeClass}">${published}</span></div>`;
                             }
                         },
                         {

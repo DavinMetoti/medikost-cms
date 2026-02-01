@@ -11,36 +11,37 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('products')) {
-            Schema::create('products', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
-                $table->string('sku')->unique();
-                $table->string('barcode')->nullable()->index();
-                $table->unsignedBigInteger('category_id')->nullable()->index();
-                $table->unsignedBigInteger('supplier_id')->nullable()->index();
-                $table->json('tag')->nullable();
-                $table->text('description')->nullable();
-                $table->integer('stock')->default(0);
-                $table->integer('stock_minimum')->default(0);
-                $table->decimal('price', 15, 2)->nullable();
-                $table->string('unit')->default('pcs');
-                $table->string('location')->nullable();
-                $table->boolean('is_active')->default(true);
-                $table->json('images')->nullable();
-                $table->json('specifications')->nullable();
-                $table->boolean('is_published')->default(false);
-                $table->timestamps();
-                $table->unsignedBigInteger('created_by')->nullable();
-                $table->unsignedBigInteger('updated_by')->nullable();
+        Schema::create('products', function (Blueprint $table) {
+            $table->id();
 
-                // Foreign key constraints
-                $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
-                $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('set null');
-                $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
-                $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
-            });
-        }
+            $table->string('name')->index();
+            $table->text('address')->nullable();
+
+            $table->decimal('distance_to_kariadi', 5, 2)
+                ->nullable()
+                ->index();
+
+            $table->string('whatsapp')->nullable();
+            $table->text('description')->nullable();
+
+            $table->json('facilities')->nullable();
+            $table->string('google_maps_link')->nullable();
+
+            $table->boolean('is_active')->default(true)->index();
+            $table->boolean('is_published')->default(false)->index();
+
+            $table->json('images')->nullable();
+
+            $table->timestamps();
+            $table->unsignedBigInteger('created_by')->nullable()->index();
+            $table->unsignedBigInteger('updated_by')->nullable();
+
+            $table->index(['is_active', 'is_published']);
+
+            $table->foreign('created_by')->references('id')->on('users')->nullOnDelete();
+            $table->foreign('updated_by')->references('id')->on('users')->nullOnDelete();
+        });
+
     }
 
     /**

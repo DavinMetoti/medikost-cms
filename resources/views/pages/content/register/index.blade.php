@@ -50,11 +50,11 @@
 
         const getRoleBadge = (role) => {
             const badgeMap = {
-                admin: 'primary',
-                cashier: 'secondary',
-                warehouse: 'success',
-                customer: 'info',
-                guest: 'warning'
+                admin: 'danger',      // Super power / full access
+                manager: 'primary',   // Pengelola kos
+                editor: 'success',    // Konten & landing page
+                viewer: 'secondary',  // Read-only
+                guest: 'warning'      // Belum login / publik
             };
 
             const badgeClass = badgeMap[role] || 'warning';

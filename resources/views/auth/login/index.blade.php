@@ -14,12 +14,12 @@
                                     <div class="bg-holder" style="background-image:url(../../../assets/img/bg/38.png);"></div>
                                     <!--/.bg-holder-->
                                     <div class="position-relative px-4 px-lg-7 pt-7 pb-7 pb-sm-5 text-center text-md-start pb-lg-7 pb-md-7">
-                                        <h3 class="mb-3 text-body-emphasis fs-7">TB. Makmur Subur Lancar</h3>
-                                        <p class="text-body-tertiary">Berikan diri Anda pengalaman pengembangan yang mudah dan bebas repot dengan keunggulan unik!</p>
+                                        <h3 class="mb-3 text-body-emphasis fs-7">Medikost CMS</h3>
+                                        <p class="text-body-tertiary">Sistem Manajemen Kost yang Mudah dan Efisien untuk Pengelolaan Kost Anda!</p>
                                         <ul class="list-unstyled mb-0 w-max-content w-md-auto">
-                                            <li class="d-flex align-items-center"><span class="uil uil-check-circle text-success me-2"></span><span class="text-body-tertiary fw-semibold">Cepat dan Efisien</span></li>
-                                            <li class="d-flex align-items-center"><span class="uil uil-check-circle text-success me-2"></span><span class="text-body-tertiary fw-semibold">Mudah Digunakan</span></li>
-                                            <li class="d-flex align-items-center"><span class="uil uil-check-circle text-success me-2"></span><span class="text-body-tertiary fw-semibold">Desain Responsif & Fleksibel</span></li>
+                                            <li class="d-flex align-items-center"><span class="uil uil-check-circle text-success me-2"></span><span class="text-body-tertiary fw-semibold">Manajemen Kost Lengkap</span></li>
+                                            <li class="d-flex align-items-center"><span class="uil uil-check-circle text-success me-2"></span><span class="text-body-tertiary fw-semibold">Booking Otomatis</span></li>
+                                            <li class="d-flex align-items-center"><span class="uil uil-check-circle text-success me-2"></span><span class="text-body-tertiary fw-semibold">API untuk Frontend</span></li>
                                         </ul>
                                     </div>
 

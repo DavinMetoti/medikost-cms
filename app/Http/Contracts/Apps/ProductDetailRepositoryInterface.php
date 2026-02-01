@@ -4,7 +4,7 @@ namespace App\Http\Contracts\Apps;
 
 use Illuminate\Http\Request;
 
-interface ProductRepositoryInterface
+interface ProductDetailRepositoryInterface
 {
     /**
      * Store a new prodyct.
@@ -67,12 +67,4 @@ interface ProductRepositoryInterface
      * @return int
      */
     public function countPublished();
-
-    /**
-     * Search products by name.
-     *
-     * @param string $search
-     * @return \Illuminate\Support\Collection
-     */
-    public function search(string $search);
 }

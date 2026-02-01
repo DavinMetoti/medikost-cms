@@ -2,28 +2,29 @@
 
 namespace App\Http\Controllers\Apps;
 
-use App\Http\Contracts\Apps\ProductRepositoryInterface;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Apps\Product\StoreRequest;
-use App\Http\Requests\Apps\Product\UpdateRequest;
+use App\Http\Requests\Apps\ProductDetail\StoreRequest;
+use App\Http\Requests\Apps\ProductDetail\UpdateRequest;
+use App\Http\Contracts\Apps\ProductDetailRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
-class ProductController extends Controller
+class ProductDetailController extends Controller
 {
-    protected $productRepo;
+    protected $productDetailRepo;
 
-    public function __construct(ProductRepositoryInterface $productRepo)
+    public function __construct(ProductDetailRepositoryInterface $productDetailRepo)
     {
-        $this->productRepo = $productRepo;
+        $this->productDetailRepo = $productDetailRepo;
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('pages.content.product.index');
+        return view('pages.content.product-detail.index');
     }
 
     /**
@@ -31,7 +32,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('pages.content.product.create');
+        return view('pages.content.product-detail.create');
     }
 
     /**
@@ -47,22 +48,22 @@ class ProductController extends Controller
             if ($request->hasFile('file_image')) {
                 foreach ($request->file('file_image') as $image) {
                     $uniqueName = time() . '-' . $image->getClientOriginalName();
-                    $storedPath = $image->storeAs('products', $uniqueName, 'public');
-                    $imagePaths[] = str_replace('products/', '', $storedPath); // Remove 'products/' prefix
+                    $storedPath = $image->storeAs('product-details', $uniqueName, 'public');
+                    $imagePaths[] = str_replace('product-details/', '', $storedPath);
                 }
             }
 
-            $validated['images'] = json_encode($imagePaths); // Save images as JSON
+            $validated['images'] = json_encode($imagePaths);
 
-            $product = $this->productRepo->store($validated);
+            $productDetail = $this->productDetailRepo->store($validated);
 
             return response()->json([
-                'message' => 'Product successfully created!',
-                'data' => $product,
+                'message' => 'Product Detail successfully created!',
+                'data' => $productDetail,
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Product creation failed!',
+                'message' => 'Product Detail creation failed!',
                 'error' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -73,8 +74,9 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $product = $this->productRepo->find($id);
-        return view('pages.content.product.show', compact('product'));
+        $productDetail = $this->productDetailRepo->find($id);
+        $bookings = \App\Models\Booking::where('product_detail_id', $id)->with('user')->orderBy('created_at', 'desc')->get();
+        return view('pages.content.product-detail.show', compact('productDetail', 'bookings'));
     }
 
     /**
@@ -82,8 +84,8 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $product = $this->productRepo->find($id);
-        return view('pages.content.product.edit', compact('product'));
+        $productDetail = $this->productDetailRepo->find($id);
+        return view('pages.content.product-detail.edit', compact('productDetail'));
     }
 
     /**
@@ -94,30 +96,25 @@ class ProductController extends Controller
         $validated = $request->validated();
 
         try {
-            $product = $this->productRepo->find($id);
+            $productDetail = $this->productDetailRepo->find($id);
 
             // Handle new image uploads
             $newImagePaths = [];
             if ($request->hasFile('file_image')) {
                 foreach ($request->file('file_image') as $image) {
                     $uniqueName = time() . '-' . $image->getClientOriginalName();
-                    $newImagePaths[] = $image->storeAs('products', $uniqueName, 'public');
+                    $newImagePaths[] = $image->storeAs('product-details', $uniqueName, 'public');
                 }
             }
 
             // Merge existing images with new ones
-            $existingImages = json_decode($product->images ?? '[]', true);
-
-            // Remove 'products/' prefix from existing images
+            $existingImages = json_decode($productDetail->images ?? '[]', true);
             $existingImages = array_map(function ($image) {
-                return str_replace('products/', '', $image);
+                return str_replace('product-details/', '', $image);
             }, $existingImages);
-
-            // Remove 'products/' prefix from new images
             $newImagePaths = array_map(function ($image) {
-                return str_replace('products/', '', $image);
+                return str_replace('product-details/', '', $image);
             }, $newImagePaths);
-
             $mergedImages = array_merge($existingImages, $newImagePaths);
 
             // Handle removed images
@@ -128,20 +125,20 @@ class ProductController extends Controller
 
             // Delete removed image files
             foreach ($removedImages as $removedImage) {
-                Storage::disk('public')->delete('products/' . $removedImage);
+                Storage::disk('public')->delete('product-details/' . $removedImage);
             }
 
             $validated['images'] = json_encode(array_values($mergedImages));
 
-            $updatedProduct = $this->productRepo->update($id, $validated);
+            $updatedProductDetail = $this->productDetailRepo->update($id, $validated);
 
             return response()->json([
-                'message' => 'Product successfully updated!',
-                'data' => $updatedProduct,
+                'message' => 'Product Detail successfully updated!',
+                'data' => $updatedProductDetail,
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Product update failed!',
+                'message' => 'Product Detail update failed!',
                 'error' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -153,14 +150,14 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         try {
-            $product = $this->productRepo->delete($id);
+            $productDetail = $this->productDetailRepo->delete($id);
             return response()->json([
-                'message' => 'Product successfully deleted!',
-                'data' => $product,
+                'message' => 'Product Detail successfully deleted!',
+                'data' => $productDetail,
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Product delete failed!',
+                'message' => 'Product Detail delete failed!',
                 'error' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -169,7 +166,7 @@ class ProductController extends Controller
     public function datatable(Request $request)
     {
         try {
-            return $this->productRepo->datatable($request);
+            return $this->productDetailRepo->datatable($request);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -181,9 +178,9 @@ class ProductController extends Controller
     public function counts()
     {
         try {
-            $allCount = $this->productRepo->countAll();
-            $draftCount = $this->productRepo->countDraft();
-            $publishedCount = $this->productRepo->countPublished();
+            $allCount = $this->productDetailRepo->countAll();
+            $draftCount = $this->productDetailRepo->countDraft();
+            $publishedCount = $this->productDetailRepo->countPublished();
 
             return response()->json([
                 'all' => $allCount,
@@ -192,31 +189,7 @@ class ProductController extends Controller
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Failed to fetch product counts!',
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public function search(Request $request)
-    {
-        try {
-            $search = $request->get('search', '');
-            $products = $this->productRepo->search($search);
-
-            $results = $products->map(function ($product) {
-                return [
-                    'id' => $product->id,
-                    'text' => $product->name,
-                ];
-            });
-
-            return response()->json([
-                'results' => $results,
-            ], Response::HTTP_OK);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Failed to search products!',
+                'message' => 'Failed to fetch product detail counts!',
                 'error' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
+use App\Models\ProductDetail;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -12,7 +14,39 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('pages.content.dashboard.index');
+        // Statistik Kost
+        $totalProducts = Product::count();
+        $publishedProducts = Product::where('is_published', true)->count();
+        $draftProducts = Product::where('is_published', false)->count();
+
+        // Distribusi Category
+        $categoryStats = Product::selectRaw('category, COUNT(*) as count')
+            ->groupBy('category')
+            ->pluck('count', 'category')
+            ->toArray();
+
+        // Statistik Kamar
+        $totalRooms = ProductDetail::count();
+        $availableRooms = ProductDetail::where('status', 'kosong')->count();
+        $occupiedRooms = ProductDetail::where('status', 'terisi')->count();
+
+        // Recent Products
+        $recentProducts = Product::latest()->take(5)->get();
+
+        // Recent Rooms
+        $recentRooms = ProductDetail::with('product')->latest()->take(5)->get();
+
+        return view('pages.content.dashboard.index', compact(
+            'totalProducts',
+            'publishedProducts',
+            'draftProducts',
+            'categoryStats',
+            'totalRooms',
+            'availableRooms',
+            'occupiedRooms',
+            'recentProducts',
+            'recentRooms'
+        ));
     }
 
     /**

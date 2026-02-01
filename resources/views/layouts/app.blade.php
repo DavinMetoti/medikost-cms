@@ -68,6 +68,8 @@
 
     <script type="module" src="{{ secure_asset('assets/js/modules/renderer.js')}}"></script>
 
+    @yield('scripts')
+
     <script>
         NProgress.start();
 

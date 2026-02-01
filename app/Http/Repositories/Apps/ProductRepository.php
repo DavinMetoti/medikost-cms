@@ -34,7 +34,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function datatable(Request $request)
     {
-        $query = Product::with('supplier', 'category', 'unitOfMeasurement');
+        $query = Product::with('productDetails');
 
         // Apply filter based on is_published if provided
         if ($request->has('filter')) {
@@ -51,7 +51,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function find(string $id)
     {
-        return Product::with('supplier','category', 'unitOfMeasurement')->find($id);
+        return Product::with('productDetails')->find($id);
     }
 
     public function countAll()
@@ -67,5 +67,13 @@ class ProductRepository implements ProductRepositoryInterface
     public function countPublished()
     {
         return Product::where('is_published', 1)->count();
+    }
+
+    public function search(string $search)
+    {
+        return Product::where('name', 'like', '%' . $search . '%')
+            ->where('is_published', 1) // Only search published products
+            ->limit(20) // Limit results for performance
+            ->get();
     }
 }
