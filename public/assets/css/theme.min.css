@@ -284,7 +284,7 @@
   --phoenix-input-group-addon-bg-global: #eff2f6;
   --phoenix-dropdown-link-color-global: #525b75;
   --phoenix-dropdown-link-hover-color-global: #292e3b;
-  --phoenix-nav-vertical-color-global: #141824;
+  --phoenix-nav-vertical-color-global: #00A992;
   /* -------------------------------------------------------------------------- */
   /*                                Scrollbar                                   */
   /* -------------------------------------------------------------------------- */
@@ -770,6 +770,8 @@
   --phoenix-offcanvas-bg: #141824;
 }
 [data-bs-theme=dark] [data-navbar-appearance=darker] {
+  --phoenix-navbar-top-bg-color: #00A992;
+  --phoenix-navbar-top-link-color: #fff;
   --phoenix-navbar-top-dropdown-hover-bg: #31374a;
 }
 [data-bs-theme=dark] .table-primary {
@@ -5490,7 +5492,7 @@ textarea.form-control-lg {
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
   color: var(--phoenix-nav-tabs-link-active-color);
-  background-color: var(--phoenix-nav-tabs-link-active-bg);
+  background-color: var(--phoenix-nav-vertical-color-global);
   border-color: var(--phoenix-nav-tabs-link-active-border-color);
 }
 .nav-tabs .dropdown-menu {
@@ -28433,7 +28435,7 @@ html:not(.navbar-vertical-collapsed) .navbar-vertical.navbar-expand-xs .navbar-v
   color: var(--phoenix-nav-vertical-color-global);
 }
 .navbar-vertical .navbar-vertical-content .navbar-nav .nav-link.active {
-  color: var(--phoenix-navbar-vertical-link-hover-bg);
+  color: white;
   background: var(--phoenix-nav-vertical-color-global);
   /* border: 2px solid var(--phoenix-blue); */
   border-radius: 7px;
@@ -31776,7 +31778,7 @@ html:not(.navbar-vertical-collapsed) .navbar-vertical.navbar-expand-xs .navbar-v
   margin-right: 0.5rem;
   text-align: center;
   border-radius: 50rem;
-  background: var(--phoenix-body-highlight-bg);
+  background: var(--phoenix-nav-vertical-color-global);
   color: var(--phoenix-primary);
 }
 .navbar-bottom .nav .nav-link.active .nav-icon {
@@ -32005,7 +32007,7 @@ html:not(.navbar-vertical-collapsed) .navbar-vertical.navbar-expand-xs .navbar-v
   color: var(--phoenix-nav-vertical-color-global);
 }
 .nav-vertical.doc-nav .nav-link.active {
-  background-color: var(--phoenix-secondary-bg);
+  background-color: var(--phoenix-nav-vertical-color-global);
 }
 @media (max-width: 1199.98px) {
   .nav-vertical.nav-vertical .nav-link {
@@ -32052,7 +32054,7 @@ html:not(.navbar-vertical-collapsed) .navbar-vertical.navbar-expand-xs .navbar-v
   border-radius: 6px;
 }
 .navbar-landing .nav-link:hover, .navbar-landing .nav-link.active {
-  background: var(--phoenix-secondary-bg);
+  background: var(--phoenix-nav-vertical-color-global);
 }
 @media (min-width: 576px) {
   .navbar-landing.navbar-home .nav-link {
@@ -37147,12 +37149,12 @@ a[href].bg-body-secondary:hover, a[href].bg-body-secondary:focus {
 }
 :root:not([data-bs-theme=dark]) [data-navbar-appearance=darker]:not([data-bs-theme=dark]) .navbar-top-collapse.show,
 [data-bs-theme=light]:not([data-bs-theme=dark]) [data-navbar-appearance=darker]:not([data-bs-theme=dark]) .navbar-top-collapse.show {
-  --phoenix-navbar-top-link-color: #9fa6bc;
-  --phoenix-navbar-top-menu-bg-color: #141824;
+  --phoenix-navbar-top-link-color: #fff;
+  --phoenix-navbar-top-menu-bg-color: #00A992;
   --phoenix-navbar-top-border-color: var(--phoenix-border-color);
-  --phoenix-navbar-top-link-hover-color: #cbd0dd;
-  --phoenix-navbar-top-link-hover-bg: #222834;
-  --phoenix-navbar-top-link-active-color: #cbd0dd;
+  --phoenix-navbar-top-link-hover-color: #fff;
+  --phoenix-navbar-top-link-hover-bg: rgba(255,255,255,0.1);
+  --phoenix-navbar-top-link-active-color: #fff;
 }
 :root [data-navbar-appearance=darker],
 [data-bs-theme=light] [data-navbar-appearance=darker] {
@@ -37168,7 +37170,8 @@ a[href].bg-body-secondary:hover, a[href].bg-body-secondary:focus {
   --phoenix-navbar-vertical-collapsed-menu-bg: #222834;
   --phoenix-logo-text: #eff2f6;
   --phoenix-navbar-footer-border-color: #31374a;
-  --phoenix-navbar-top-bg-color: #222834;
+  --phoenix-navbar-top-bg-color: #00A992;
+  --phoenix-nav-vertical-color-global: #00A992;
 }
 :root [data-navbar-appearance=darker] .navbar-nav-icons,
 [data-bs-theme=light] [data-navbar-appearance=darker] .navbar-nav-icons {
@@ -37217,7 +37220,8 @@ a[href].bg-body-secondary:hover, a[href].bg-body-secondary:focus {
   --phoenix-navbar-vertical-link-active-color: #fff;
   --phoenix-navbar-vertical-link-disable-color: #6e7891;
   --phoenix-navbar-vertical-collapsed-menu-bg: #222834;
-  --phoenix-navbar-top-bg-color: #222834;
+  --phoenix-navbar-top-bg-color: #00A992;
+  --phoenix-nav-vertical-color-global: #00A992;
 }
 [data-bs-theme=dark] [data-navbar-appearance=darker] .form-control {
   color: #6e7891;
