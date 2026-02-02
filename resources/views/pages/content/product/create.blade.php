@@ -193,9 +193,6 @@
 <script>
     let urls = {
         products: "{{ route('app.products.store') }}",
-        categorySelect: "{{ route('app.categories.select') }}",
-        supplierSelect: "{{ route('app.suppliers.select') }}",
-        uomSelect: "{{ route('app.uom.select') }}",
         index: "{{ route('app.products.index') }}",
     };
 
