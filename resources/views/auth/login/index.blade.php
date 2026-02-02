@@ -29,10 +29,10 @@
                                     <div class="auth-form-box">
                                         <div class="text-center mb-7">
                                             <a class="d-flex flex-center text-decoration-none mb-4" href="">
-                                                <div class="d-flex align-items-center fw-bolder fs-3 d-inline-block"><img src="../../../assets/img/icons/logo.png" alt="phoenix" width="58" /></div>
+                                                <div class="d-flex align-items-center fw-bolder fs-3 d-inline-block"><img src="{{ secure_asset('assets/img/logos/medikost_logo.png') }}" alt="Medikost" width="58" /></div>
                                             </a>
-                                            <h3 class="text-body-highlight">Sign In</h3>
-                                            <p class="text-body-tertiary">Get access to your account</p>
+                                            <h3 class="text-body-highlight text-success">Sign In</h3>
+                                            <p class="text-body-tertiary text-success">Get access to your account</p>
                                             @if ($errors->has('login'))
                                                 <div class="alert alert-outline-danger p-2" role="alert">
                                                     {{ $errors->first('login') }}
@@ -94,11 +94,11 @@
                                                             <label class="form-check-label mb-0" for="basic-checkbox">Remember me</label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-auto"><a class="fs-9 fw-semibold" href="forgot-password.html">Forgot Password?</a></div>
+                                                    <div class="col-auto"><a class="fs-9 fw-semibold text-success" href="forgot-password.html">Forgot Password?</a></div>
                                                 </div>
 
                                                 <!-- Sign In Button -->
-                                                <button class="btn btn-primary w-100 mb-3" type="submit">Sign In</button>
+                                                <button class="btn btn-success w-100 mb-3" type="submit">Sign In</button>
                                             </form>
                                             <!-- End: Login Form -->
                                         </div>
