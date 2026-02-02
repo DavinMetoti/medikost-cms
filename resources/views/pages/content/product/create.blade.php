@@ -58,7 +58,7 @@
                 {{-- Whatsapp --}}
                 <div class="mb-3">
                     <label for="whatsapp" class="form-label">Whatsapp</label>
-                    <input class="form-control" type="text" id="whatsapp" name="whatsapp" placeholder="Whatsapp number">
+                    <input class="form-control" type="text" id="whatsapp" name="whatsapp" placeholder="628xxxxxxxxx">
                 </div>
 
                 {{-- Description --}}
@@ -261,6 +261,18 @@
 
         // Submit button functionality
         $('#submit-btn').on('click', function() {
+            // Validate WhatsApp number
+            const whatsapp = $('#whatsapp').val();
+            if (!whatsapp.startsWith('628')) {
+                App.Toast.showToast({
+                    title: 'Error',
+                    message: 'Nomor WhatsApp harus dimulai dengan 628.',
+                    type: 'danger',
+                    delay: 5000
+                });
+                return;
+            }
+
             // Validate minimum 3 images
             if (Dropzone.instances.length === 0 || Dropzone.instances[0].files.length < 3) {
                 App.Toast.showToast({
@@ -305,6 +317,18 @@
 
         // Draft button functionality
         $('#draft-btn').on('click', function() {
+            // Validate WhatsApp number
+            const whatsapp = $('#whatsapp').val();
+            if (!whatsapp.startsWith('628')) {
+                App.Toast.showToast({
+                    title: 'Error',
+                    message: 'Nomor WhatsApp harus dimulai dengan 628.',
+                    type: 'danger',
+                    delay: 5000
+                });
+                return;
+            }
+
             // Validate minimum 3 images
             if (Dropzone.instances.length === 0 || Dropzone.instances[0].files.length < 3) {
                 App.Toast.showToast({

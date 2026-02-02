@@ -61,7 +61,7 @@ $facilities = json_decode($product->facilities ?? '[]', true);
                 {{-- Whatsapp --}}
                 <div class="mb-3">
                     <label for="whatsapp" class="form-label">Whatsapp</label>
-                    <input class="form-control" type="text" id="whatsapp" name="whatsapp" placeholder="Whatsapp number" value="{{ $product->whatsapp }}">
+                    <input class="form-control" type="text" id="whatsapp" name="whatsapp" placeholder="628xxxxxxxxx" value="{{ $product->whatsapp }}">
                 </div>
 
                 {{-- Description --}}
@@ -306,6 +306,18 @@ $facilities = json_decode($product->facilities ?? '[]', true);
 
         // Submit button functionality
         $('#submit-btn').on('click', function () {
+            // Validate WhatsApp number
+            const whatsapp = $('#whatsapp').val();
+            if (!whatsapp.startsWith('628')) {
+                App.Toast.showToast({
+                    title: 'Error',
+                    message: 'Nomor WhatsApp harus dimulai dengan 628.',
+                    type: 'danger',
+                    delay: 5000
+                });
+                return;
+            }
+
             // Validate minimum 3 images
             const existingImages = @json(json_decode($product->images ?? '[]', true));
             const newImagesCount = Dropzone.instances.length > 0 ? Dropzone.instances[0].files.length : 0;
@@ -355,6 +367,18 @@ $facilities = json_decode($product->facilities ?? '[]', true);
 
         // Draft button functionality
         $('#draft-btn').on('click', function () {
+            // Validate WhatsApp number
+            const whatsapp = $('#whatsapp').val();
+            if (!whatsapp.startsWith('628')) {
+                App.Toast.showToast({
+                    title: 'Error',
+                    message: 'Nomor WhatsApp harus dimulai dengan 628.',
+                    type: 'danger',
+                    delay: 5000
+                });
+                return;
+            }
+
             // Validate minimum 3 images
             const existingImages = @json(json_decode($product->images ?? '[]', true));
             const newImagesCount = Dropzone.instances.length > 0 ? Dropzone.instances[0].files.length : 0;
