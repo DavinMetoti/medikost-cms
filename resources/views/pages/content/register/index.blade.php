@@ -13,7 +13,6 @@
                     <h3>User Management</h3>
                     <p>Manage user accounts and add new users.</p>
                 </div>
-                <button class="btn btn-primary" id="btn-users-add"><i class="fas fa-plus me-2"></i>Add User</button>
             </div>
         </div>
         <div class="card-body">
