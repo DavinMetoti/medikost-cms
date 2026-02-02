@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProductDetailController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,4 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Public API routes for frontend
 Route::middleware('api.response')->prefix('v1')->group(function () {
     Route::apiResource('products', ProductController::class)->only(['index', 'show']);
+    
+    // Product details routes
+    Route::get('products/{product}/details', [ProductDetailController::class, 'index']);
+    Route::get('products/{product}/details/{detail}', [ProductDetailController::class, 'show']);
 });
