@@ -136,51 +136,97 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $product = Product::with([
-            'productDetails' => function ($q) {
-                $q->where('is_active', true)
-                  ->select('id', 'product_id', 'room_name', 'price', 'status', 'available_rooms', 'images', 'facilities', 'description');
+        \Log::info('ProductController show called', ['id' => $id]);
+
+        try {
+            $product = Product::findOrFail($id);
+
+            if (!$product->is_published) {
+                \Log::warning('Product not published', ['id' => $id]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Product not found'
+                ], 404);
             }
-        ])
-        ->where('is_published', true)
-        ->select('id', 'name', 'address', 'distance_to_kariadi', 'whatsapp', 'google_maps_link', 'facilities', 'description', 'images')
-        ->findOrFail($id);
 
-        // Process facilities
-        $facilities = json_decode($product->facilities, true) ?? [];
-        $product->facilities = is_array($facilities) ? $facilities : [];
+            $product->load([
+                'productDetails' => function ($q) {
+                    $q->where('is_active', true)
+                      ->select('id', 'product_id', 'room_name', 'price', 'status', 'available_rooms', 'images', 'facilities', 'description');
+                }
+            ]);
 
-        // Process images
-        $images = json_decode($product->images, true) ?? [];
-        $product->images = is_array($images) ? $images : [];
+            \Log::info('Product loaded with details', ['product_id' => $product->id, 'details_count' => $product->productDetails->count()]);
 
-        // Process product details
-        $product->product_details = $product->productDetails->map(function ($detail) {
-            $detailFacilities = json_decode($detail->facilities, true) ?? [];
-            $detail->facilities = is_array($detailFacilities) ? $detailFacilities : [];
+            // Process facilities
+            if (is_array($product->facilities)) {
+                // Already decoded
+            } else {
+                $facilities = json_decode($product->facilities, true) ?? [];
+                $product->facilities = is_array($facilities) ? $facilities : [];
+            }
 
-            $detailImages = json_decode($detail->images, true) ?? [];
-            $detail->images = is_array($detailImages) ? $detailImages : [];
+            // Process images
+            if (is_array($product->images)) {
+                // Already decoded
+            } else {
+                $images = json_decode($product->images, true) ?? [];
+                $product->images = is_array($images) ? $images : [];
+            }
 
-            return $detail->only(['id', 'room_name', 'price', 'status', 'available_rooms', 'facilities', 'description', 'images']);
-        });
+            // Process product details
+            $product->product_details = $product->productDetails->map(function ($detail) {
+                try {
+                    if (is_array($detail->facilities)) {
+                        // Already decoded
+                    } else {
+                        $detailFacilities = json_decode($detail->facilities, true) ?? [];
+                        $detail->facilities = is_array($detailFacilities) ? $detailFacilities : [];
+                    }
 
-        // Calculate total available rooms and status
-        $totalAvailable = $product->productDetails->sum('available_rooms');
-        $totalRooms = $product->productDetails->count();
-        if ($totalAvailable == 0) {
-            $product->status = 'habis';
-            $product->room_available = 0;
-        } else {
-            $product->status = 'tersedia';
-            $product->room_available = $totalAvailable;
+                    if (is_array($detail->images)) {
+                        // Already decoded
+                    } else {
+                        $detailImages = json_decode($detail->images, true) ?? [];
+                        $detail->images = is_array($detailImages) ? $detailImages : [];
+                    }
+
+                    return $detail->only(['id', 'room_name', 'price', 'status', 'available_rooms', 'facilities', 'description', 'images']);
+                } catch (\Exception $e) {
+                    \Log::error('Error processing product detail', ['detail_id' => $detail->id, 'error' => $e->getMessage()]);
+                    return null; // Skip invalid detail
+                }
+            })->filter(); // Remove nulls
+
+            // Calculate total available rooms and status
+            $totalAvailable = $product->productDetails->sum('available_rooms');
+            $totalRooms = $product->productDetails->count();
+            if ($totalAvailable == 0) {
+                $product->status = 'habis';
+                $product->room_available = 0;
+            } else {
+                $product->status = 'tersedia';
+                $product->room_available = $totalAvailable;
+            }
+            $product->total_rooms = $totalRooms;
+
+            return response()->json([
+                'success' => true,
+                'data' => $product,
+                'message' => 'Product details retrieved successfully'
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            \Log::warning('Product not found', ['id' => $id]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found'
+            ], 404);
+        } catch (\Exception $e) {
+            \Log::error('Error in ProductController show', ['id' => $id, 'error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while retrieving the product'
+            ], 500);
         }
-        $product->total_rooms = $totalRooms;
-
-        return response()->json([
-            'success' => true,
-            'data' => $product,
-            'message' => 'Product details retrieved successfully'
-        ]);
     }
 }
