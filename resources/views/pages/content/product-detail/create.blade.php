@@ -58,8 +58,7 @@
 
                 {{-- Available Rooms --}}
                 <div class="mb-3">
-                    <label for="available_rooms" class="form-label">Jumlah Kamar Tersedia</label>
-                    <input class="form-control" type="number" id="available_rooms" name="available_rooms" placeholder="Jumlah Kamar Tersedia">
+                    <input type="hidden" id="available_rooms" name="available_rooms" value="1">
                 </div>
 
                 {{-- Description --}}
