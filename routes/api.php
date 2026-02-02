@@ -24,6 +24,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('api.response')->prefix('v1')->group(function () {
     Route::apiResource('products', ProductController::class)->only(['index', 'show']);
     
+    // Flexible search endpoint
+    Route::get('search', [ProductController::class, 'search']);
+    
     // Product details routes
     Route::get('products/{product}/details', [ProductDetailController::class, 'index']);
     Route::get('products/{product}/details/{detail}', [ProductDetailController::class, 'show']);

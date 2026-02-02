@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -132,9 +133,205 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Flexible search endpoint that returns detailed product information
      */
-    public function show(string $id)
+    public function search(Request $request)
+    {
+        $query = Product::with([
+            'productDetails' => function ($q) {
+                $q->where('is_active', true)
+                  ->select('id', 'product_id', 'room_name', 'price', 'status', 'available_rooms', 'images', 'facilities', 'description');
+            }
+        ])
+        ->where('is_published', true)
+        ->whereHas('productDetails', function ($q) {
+            $q->where('is_active', true)->whereNotNull('price');
+        })
+        ->select('id', 'name', 'address', 'distance_to_kariadi', 'whatsapp', 'google_maps_link', 'facilities', 'description', 'images', 'category', 'created_at');
+
+        // Flexible search functionality - search in multiple fields
+        if ($request->has('q') && !empty($request->q)) {
+            $searchTerm = $request->q;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'like', "%{$searchTerm}%")
+                  ->orWhere('address', 'like', "%{$searchTerm}%")
+                  ->orWhere('description', 'like', "%{$searchTerm}%")
+                  ->orWhere('category', 'like', "%{$searchTerm}%")
+                  ->orWhereHas('productDetails', function ($detailQ) use ($searchTerm) {
+                      $detailQ->where('room_name', 'like', "%{$searchTerm}%")
+                              ->orWhere('description', 'like', "%{$searchTerm}%");
+                  });
+            });
+        }
+
+        // Advanced filters
+        if ($request->has('category') && !empty($request->category)) {
+            $query->where('category', $request->category);
+        }
+
+        // Status filter (room availability)
+        if ($request->has('status') && in_array($request->status, ['kosong', 'isi', 'tersedia', 'habis'])) {
+            if ($request->status === 'tersedia') {
+                $query->whereHas('productDetails', function ($q) {
+                    $q->where('is_active', true)->where('available_rooms', '>', 0);
+                });
+            } elseif ($request->status === 'habis') {
+                $query->whereDoesntHave('productDetails', function ($q) {
+                    $q->where('is_active', true)->where('available_rooms', '>', 0);
+                });
+            } else {
+                $query->whereHas('productDetails', function ($q) use ($request) {
+                    $q->where('status', $request->status);
+                });
+            }
+        }
+
+        // Price range filter
+        if ($request->has('min_price') && is_numeric($request->min_price)) {
+            $query->whereHas('productDetails', function ($q) use ($request) {
+                $q->where('price', '>=', $request->min_price);
+            });
+        }
+        if ($request->has('max_price') && is_numeric($request->max_price)) {
+            $query->whereHas('productDetails', function ($q) use ($request) {
+                $q->where('price', '<=', $request->max_price);
+            });
+        }
+
+        // Distance range filter
+        if ($request->has('min_distance') && is_numeric($request->min_distance)) {
+            $query->where('distance_to_kariadi', '>=', $request->min_distance);
+        }
+        if ($request->has('max_distance') && is_numeric($request->max_distance)) {
+            $query->where('distance_to_kariadi', '<=', $request->max_distance);
+        }
+
+        // Facilities filter
+        if ($request->has('facilities') && !empty($request->facilities)) {
+            $facilities = is_array($request->facilities) ? $request->facilities : [$request->facilities];
+            foreach ($facilities as $facility) {
+                $query->where('facilities', 'like', "%{$facility}%");
+            }
+        }
+
+        // Sorting options
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $allowedSorts = ['name', 'distance_to_kariadi', 'created_at'];
+
+        // Special sorting for price
+        if ($sortBy === 'price') {
+            $query->leftJoin('product_details', function ($join) {
+                $join->on('products.id', '=', 'product_details.product_id')
+                     ->where('product_details.is_active', '=', true);
+            })
+            ->select('products.*', DB::raw('MIN(product_details.price) as min_price'))
+            ->groupBy('products.id')
+            ->orderBy('min_price', $sortOrder);
+        } elseif (in_array($sortBy, $allowedSorts)) {
+            $query->orderBy($sortBy, $sortOrder);
+        }
+
+        // Prioritize products with available rooms
+        $query->orderByRaw("CASE WHEN EXISTS (SELECT 1 FROM product_details pd WHERE pd.product_id = products.id AND pd.is_active = 1 AND pd.available_rooms > 0) THEN 0 ELSE 1 END");
+
+        $perPage = min($request->get('per_page', 12), 20); // Allow up to 20 items per page for search
+        $products = $query->paginate($perPage);
+
+        // Transform the data with detailed product information
+        $products->getCollection()->transform(function ($product) {
+            // Process facilities
+            $facilities = is_array($product->facilities) ? $product->facilities : json_decode($product->facilities, true) ?? [];
+            $product->facilities = is_array($facilities) ? $facilities : [];
+
+            // Process images
+            $images = is_array($product->images) ? $product->images : json_decode($product->images, true) ?? [];
+            $product->images = is_array($images) ? $images : [];
+
+            // Get thumbnail
+            $thumbnail = !empty($product->images) ? Storage::url('products/' . $product->images[0]) : null;
+
+            // Process product details
+            $product->product_details = $product->productDetails->map(function ($detail) {
+                $detailFacilities = is_array($detail->facilities) ? $detail->facilities : json_decode($detail->facilities, true) ?? [];
+                $detail->facilities = is_array($detailFacilities) ? $detailFacilities : [];
+
+                $detailImages = is_array($detail->images) ? $detail->images : json_decode($detail->images, true) ?? [];
+                $detail->images = is_array($detailImages) ? $detailImages : [];
+
+                return $detail->only(['id', 'room_name', 'price', 'status', 'available_rooms', 'facilities', 'description', 'images']);
+            })->filter();
+
+            // Calculate pricing and availability
+            $startingPrice = $product->productDetails->min('price');
+            $totalAvailable = $product->productDetails->sum('available_rooms');
+            $totalRooms = $product->productDetails->count();
+
+            if ($totalAvailable == 0) {
+                $status = 'habis';
+                $roomAvailable = 0;
+            } else {
+                $status = 'tersedia';
+                $roomAvailable = $totalAvailable;
+            }
+
+            // Get facilities preview
+            $facilitiesPreview = [];
+            if (is_array($product->facilities)) {
+                foreach ($product->facilities as $facilityGroup) {
+                    if (isset($facilityGroup['items']) && is_array($facilityGroup['items'])) {
+                        $facilitiesPreview = array_merge($facilitiesPreview, array_slice($facilityGroup['items'], 0, 2));
+                        if (count($facilitiesPreview) >= 4) break;
+                    }
+                }
+                $facilitiesPreview = array_slice($facilitiesPreview, 0, 4);
+            }
+
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'address' => $product->address,
+                'distance_to_kariadi' => (float) $product->distance_to_kariadi,
+                'whatsapp' => $product->whatsapp,
+                'google_maps_link' => $product->google_maps_link,
+                'facilities' => $product->facilities,
+                'description' => $product->description,
+                'images' => $product->images,
+                'category' => $product->category,
+                'thumbnail' => $thumbnail,
+                'starting_price' => (int) $startingPrice,
+                'facilities_preview' => $facilitiesPreview,
+                'status' => $status,
+                'room_available' => $roomAvailable,
+                'total_rooms' => $totalRooms,
+                'product_details' => $product->product_details,
+                'created_at' => $product->created_at,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $products,
+            'message' => 'Search completed successfully',
+            'meta' => [
+                'query' => $request->get('q'),
+                'total_results' => $products->total(),
+                'filters_applied' => array_filter([
+                    'category' => $request->get('category'),
+                    'status' => $request->get('status'),
+                    'min_price' => $request->get('min_price'),
+                    'max_price' => $request->get('max_price'),
+                    'min_distance' => $request->get('min_distance'),
+                    'max_distance' => $request->get('max_distance'),
+                    'facilities' => $request->get('facilities'),
+                    'sort_by' => $request->get('sort_by'),
+                    'sort_order' => $request->get('sort_order'),
+                ])
+            ]
+        ]);
+    }
+    
+    public function show($id)
     {
         \Log::info('ProductController show called', ['id' => $id]);
 
