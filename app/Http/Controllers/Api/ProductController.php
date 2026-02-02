@@ -86,6 +86,7 @@ class ProductController extends Controller
 
             // Calculate total available rooms and status
             $totalAvailable = $product->productDetails->sum('available_rooms');
+            $totalRooms = $product->productDetails->count();
             if ($totalAvailable == 0) {
                 $status = 'habis';
                 $roomAvailable = 0;
@@ -119,6 +120,7 @@ class ProductController extends Controller
                 'facilities_preview' => $facilitiesPreview,
                 'status' => $status,
                 'room_available' => $roomAvailable,
+                'total_rooms' => $totalRooms,
             ];
         });
 
@@ -165,6 +167,7 @@ class ProductController extends Controller
 
         // Calculate total available rooms and status
         $totalAvailable = $product->productDetails->sum('available_rooms');
+        $totalRooms = $product->productDetails->count();
         if ($totalAvailable == 0) {
             $product->status = 'habis';
             $product->room_available = 0;
@@ -172,6 +175,7 @@ class ProductController extends Controller
             $product->status = 'tersedia';
             $product->room_available = $totalAvailable;
         }
+        $product->total_rooms = $totalRooms;
 
         return response()->json([
             'success' => true,
