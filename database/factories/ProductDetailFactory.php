@@ -18,7 +18,7 @@ class ProductDetailFactory extends Factory
     {
         return [
             'product_id' => 1, // Will be overridden in tests
-            'room_name' => 'Room ' . $this->faker->randomLetter(),
+            'room_name' => $this->faker->randomElement(['Room A', 'Room B', 'Deluxe Room', 'Standard Room', 'Suite Room']),
             'price' => $this->faker->numberBetween(300000, 1000000),
             'status' => $this->faker->randomElement(['kosong', 'isi']),
             'available_rooms' => $this->faker->numberBetween(0, 5),

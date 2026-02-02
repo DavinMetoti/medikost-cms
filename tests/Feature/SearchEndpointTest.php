@@ -33,7 +33,7 @@ class SearchEndpointTest extends TestCase
         ]);
 
         // Test basic search
-        $response = $this->getJson('/api/v1/search?q=Mawar');
+        $response = $this->getJson('/api/v1/search?q=Room');
 
         $response->assertStatus(200)
                 ->assertJsonStructure([
@@ -76,6 +76,7 @@ class SearchEndpointTest extends TestCase
         $this->assertEquals(1, $data['total']);
         $this->assertEquals('Kost Mawar Test', $data['data'][0]['name']);
         $this->assertNotEmpty($data['data'][0]['product_details']);
+        $this->assertEquals(1, count($data['data'][0]['product_details'])); // Should only show 1 room that matches
     }
 
     /**
@@ -116,4 +117,41 @@ class SearchEndpointTest extends TestCase
         $data = $response->json('data');
         $this->assertEquals(0, $data['total']);
     }
-}
+    /**
+     * Test search filters product details by room name
+     */
+    public function test_search_filters_product_details_by_room_name(): void
+    {
+        // Create test data with multiple rooms
+        $product = Product::factory()->create([
+            'name' => 'Kost Multiple Rooms',
+            'address' => 'Jl. Test Multiple',
+            'is_published' => true,
+            'is_active' => true,
+        ]);
+
+        ProductDetail::factory()->create([
+            'product_id' => $product->id,
+            'room_name' => 'Deluxe Room',
+            'price' => 2000000,
+            'is_active' => true,
+            'available_rooms' => 1,
+        ]);
+
+        ProductDetail::factory()->create([
+            'product_id' => $product->id,
+            'room_name' => 'Standard Room',
+            'price' => 1500000,
+            'is_active' => true,
+            'available_rooms' => 1,
+        ]);
+
+        // Search for specific room
+        $response = $this->getJson('/api/v1/search?q=Deluxe');
+
+        $response->assertStatus(200);
+        $data = $response->json('data');
+        $this->assertEquals(1, $data['total']);
+        $this->assertEquals(1, count($data['data'][0]['product_details'])); // Should only show Deluxe room
+        $this->assertEquals('Deluxe Room', $data['data'][0]['product_details'][0]['room_name']);
+    }}

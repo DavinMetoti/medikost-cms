@@ -239,7 +239,7 @@ class ProductController extends Controller
         $products = $query->paginate($perPage);
 
         // Transform the data with detailed product information
-        $products->getCollection()->transform(function ($product) {
+        $products->getCollection()->transform(function ($product) use ($request) {
             // Process facilities
             $facilities = is_array($product->facilities) ? $product->facilities : json_decode($product->facilities, true) ?? [];
             $product->facilities = is_array($facilities) ? $facilities : [];
@@ -251,8 +251,9 @@ class ProductController extends Controller
             // Get thumbnail
             $thumbnail = !empty($product->images) ? Storage::url('products/' . $product->images[0]) : null;
 
-            // Process product details
-            $product->product_details = $product->productDetails->map(function ($detail) {
+            // Process product details - filter based on search query if searching for room names
+            $searchTerm = $request->get('q');
+            $filteredDetails = $product->productDetails->map(function ($detail) {
                 $detailFacilities = is_array($detail->facilities) ? $detail->facilities : json_decode($detail->facilities, true) ?? [];
                 $detail->facilities = is_array($detailFacilities) ? $detailFacilities : [];
 
@@ -262,10 +263,18 @@ class ProductController extends Controller
                 return $detail->only(['id', 'room_name', 'price', 'status', 'available_rooms', 'facilities', 'description', 'images']);
             })->filter();
 
-            // Calculate pricing and availability
-            $startingPrice = $product->productDetails->min('price');
-            $totalAvailable = $product->productDetails->sum('available_rooms');
-            $totalRooms = $product->productDetails->count();
+            // If searching for specific room name, filter the details
+            if ($searchTerm && !empty($searchTerm)) {
+                $filteredDetails = $filteredDetails->filter(function ($detail) use ($searchTerm) {
+                    return stripos($detail['room_name'], $searchTerm) !== false ||
+                           stripos($detail['description'], $searchTerm) !== false;
+                });
+            }
+
+            // Calculate pricing and availability based on filtered details
+            $startingPrice = $filteredDetails->min('price') ?: $product->productDetails->min('price');
+            $totalAvailable = $filteredDetails->sum('available_rooms') ?: $product->productDetails->sum('available_rooms');
+            $totalRooms = $filteredDetails->count() ?: $product->productDetails->count();
 
             if ($totalAvailable == 0) {
                 $status = 'habis';
@@ -304,7 +313,7 @@ class ProductController extends Controller
                 'status' => $status,
                 'room_available' => $roomAvailable,
                 'total_rooms' => $totalRooms,
-                'product_details' => $product->product_details,
+                'product_details' => $filteredDetails->values(), // Only show filtered details
                 'created_at' => $product->created_at,
             ];
         });
