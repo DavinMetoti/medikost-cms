@@ -58,6 +58,18 @@ $facilities = json_decode($product->facilities ?? '[]', true);
                     <input class="form-control" type="number" step="0.01" id="distance_to_kariadi" name="distance_to_kariadi" placeholder="Distance in km" value="{{ $product->distance_to_kariadi }}">
                 </div>
 
+                {{-- Latitude --}}
+                <div class="mb-3">
+                    <label for="latitude" class="form-label">Latitude</label>
+                    <input class="form-control" type="number" step="any" id="latitude" name="latitude" placeholder="Latitude" value="{{ $product->latitude ?? '' }}">
+                </div>
+
+                {{-- Longitude --}}
+                <div class="mb-3">
+                    <label for="longitude" class="form-label">Longitude</label>
+                    <input class="form-control" type="number" step="any" id="longitude" name="longitude" placeholder="Longitude" value="{{ $product->longitude ?? '' }}">
+                </div>
+
                 {{-- Whatsapp --}}
                 <div class="mb-3">
                     <label for="whatsapp" class="form-label">Whatsapp</label>
@@ -432,6 +444,8 @@ $facilities = json_decode($product->facilities ?? '[]', true);
             formData.append('category', $('#category').val());
             formData.append('address', $('#address').val());
             formData.append('distance_to_kariadi', $('#distance_to_kariadi').val());
+            formData.append('latitude', $('#latitude').val());
+            formData.append('longitude', $('#longitude').val());
             formData.append('whatsapp', $('#whatsapp').val());
             formData.append('description', editor.getHtml());
             formData.append('google_maps_link', $('#google_maps_link').val());

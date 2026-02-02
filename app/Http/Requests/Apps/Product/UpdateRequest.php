@@ -26,6 +26,8 @@ class UpdateRequest extends FormRequest
             'category' => 'required|in:Campur,Putri,Putra',
             'address' => 'nullable|string',
             'distance_to_kariadi' => 'nullable|numeric|min:0|max:999.99',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
             'whatsapp' => 'nullable|string|max:20',
             'description' => 'nullable|string',
             'facilities' => 'nullable|json',

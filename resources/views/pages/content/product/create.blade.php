@@ -55,6 +55,18 @@
                     <input class="form-control" type="number" step="0.01" id="distance_to_kariadi" name="distance_to_kariadi" placeholder="Distance in km">
                 </div>
 
+                {{-- Latitude --}}
+                <div class="mb-3">
+                    <label for="latitude" class="form-label">Latitude</label>
+                    <input class="form-control" type="number" step="any" id="latitude" name="latitude" placeholder="Latitude">
+                </div>
+
+                {{-- Longitude --}}
+                <div class="mb-3">
+                    <label for="longitude" class="form-label">Longitude</label>
+                    <input class="form-control" type="number" step="any" id="longitude" name="longitude" placeholder="Longitude">
+                </div>
+
                 {{-- Whatsapp --}}
                 <div class="mb-3">
                     <label for="whatsapp" class="form-label">Whatsapp</label>
@@ -377,6 +389,8 @@
             formData.append('category', $('#category').val());
             formData.append('address', $('#address').val());
             formData.append('distance_to_kariadi', $('#distance_to_kariadi').val());
+            formData.append('latitude', $('#latitude').val());
+            formData.append('longitude', $('#longitude').val());
             formData.append('whatsapp', $('#whatsapp').val());
             formData.append('description', editor.getHtml());
             const facilities = [];
@@ -430,7 +444,7 @@
 
         // Helper to clear all fields
         function clearAllFields() {
-            $('#name, #address, #distance_to_kariadi, #whatsapp, #google_maps_link, #price').val('');
+            $('#name, #address, #distance_to_kariadi, #latitude, #longitude, #whatsapp, #google_maps_link, #price').val('');
             $('#facilities').val('[]');
             editor.setContent('');
 

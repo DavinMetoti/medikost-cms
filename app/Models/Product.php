@@ -13,6 +13,8 @@ class Product extends Model
         'name',
         'address',
         'distance_to_kariadi',
+        'latitude',
+        'longitude',
         'whatsapp',
         'description',
         'facilities',
@@ -29,6 +31,8 @@ class Product extends Model
         'facilities' => 'array',
         'images' => 'array',
         'distance_to_kariadi' => 'decimal:2',
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
         'is_active' => 'boolean',
         'is_published' => 'boolean',
     ];
