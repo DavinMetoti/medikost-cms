@@ -85,8 +85,9 @@ class ProductController extends Controller
             // Get starting price (lowest price from active product details)
             $startingPrice = $product->productDetails->min('price');
 
-            // Calculate total available rooms and status
-            $totalAvailable = $product->productDetails->sum('available_rooms');
+            // Calculate total available rooms and status from vacant rooms only
+            $vacantDetails = $product->productDetails->where('status', 'kosong');
+            $totalAvailable = $vacantDetails->sum('available_rooms');
             $totalRooms = $product->productDetails->count();
             if ($totalAvailable == 0) {
                 $status = 'habis';
@@ -114,6 +115,8 @@ class ProductController extends Controller
                 'name' => $product->name,
                 'address' => $product->address,
                 'distance_to_kariadi' => (float) $product->distance_to_kariadi,
+                'latitude' => $product->latitude,
+                'longitude' => $product->longitude,
                 'thumbnail' => $thumbnail,
                 'starting_price' => (int) $startingPrice,
                 'whatsapp' => $product->whatsapp,
@@ -271,9 +274,10 @@ class ProductController extends Controller
                 });
             }
 
-            // Calculate pricing and availability based on filtered details
+            // Calculate pricing and availability based on filtered details (vacant rooms only)
+            $vacantFilteredDetails = $filteredDetails->where('status', 'kosong');
             $startingPrice = $filteredDetails->min('price') ?: $product->productDetails->min('price');
-            $totalAvailable = $filteredDetails->sum('available_rooms') ?: $product->productDetails->sum('available_rooms');
+            $totalAvailable = $vacantFilteredDetails->sum('available_rooms') ?: $product->productDetails->where('status', 'kosong')->sum('available_rooms');
             $totalRooms = $filteredDetails->count() ?: $product->productDetails->count();
 
             if ($totalAvailable == 0) {
@@ -301,6 +305,8 @@ class ProductController extends Controller
                 'name' => $product->name,
                 'address' => $product->address,
                 'distance_to_kariadi' => (float) $product->distance_to_kariadi,
+                'latitude' => $product->latitude,
+                'longitude' => $product->longitude,
                 'whatsapp' => $product->whatsapp,
                 'google_maps_link' => $product->google_maps_link,
                 'facilities' => $product->facilities,
@@ -404,8 +410,9 @@ class ProductController extends Controller
                 }
             })->filter(); // Remove nulls
 
-            // Calculate total available rooms and status
-            $totalAvailable = $product->productDetails->sum('available_rooms');
+            // Calculate total available rooms and status from vacant rooms only
+            $vacantDetails = $product->productDetails->where('status', 'kosong');
+            $totalAvailable = $vacantDetails->sum('available_rooms');
             $totalRooms = $product->productDetails->count();
             if ($totalAvailable == 0) {
                 $product->status = 'habis';
