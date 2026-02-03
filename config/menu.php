@@ -31,13 +31,13 @@ return [
                     'route' => 'app.product-details.index',
                     'permission' => 'view rooms',
                 ],
-                [
-                    'title' => 'Bookings',
-                    'icon' => 'fas fa-calendar-check',
-                    'father' => '',
-                    'route' => 'app.bookings.index',
-                    'permission' => 'view rooms', // Assuming bookings are part of room management
-                ],
+                // [
+                //     'title' => 'Bookings',
+                //     'icon' => 'fas fa-calendar-check',
+                //     'father' => '',
+                //     'route' => 'app.bookings.index',
+                //     'permission' => 'view rooms', // Assuming bookings are part of room management
+                // ],
             ],
         ],
         [
