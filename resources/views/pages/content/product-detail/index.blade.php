@@ -26,7 +26,6 @@
                             <th>Room Name</th>
                             <th>Price</th>
                             <th>Status</th>
-                            <th>Jumlah Kamar Tersedia</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -132,14 +131,6 @@
                                 const statusLabel = data === 'kosong' ? 'Kosong' : 'Isi';
                                 const badgeClass = data === 'kosong' ? 'success' : 'warning';
                                 return `<div class="text-center"><span class="badge bg-${badgeClass}">${statusLabel}</span></div>`;
-                            }
-                        },
-                        {
-                            data: 'available_rooms',
-                            name: 'available_rooms',
-                            searchable: true,
-                            render: function (data) {
-                                return data ? data : '-';
                             }
                         },
                         {
