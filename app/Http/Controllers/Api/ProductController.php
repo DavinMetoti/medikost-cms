@@ -22,9 +22,6 @@ class ProductController extends Controller
             }
         ])
         ->where('is_published', true)
-        ->whereHas('productDetails', function ($q) {
-            $q->where('is_active', true)->whereNotNull('price');
-        })
         ->select('id', 'name', 'address', 'distance_to_kariadi', 'whatsapp', 'google_maps_link', 'facilities', 'description', 'images');
 
         // Search functionality
