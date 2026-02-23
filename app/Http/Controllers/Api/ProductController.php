@@ -22,7 +22,7 @@ class ProductController extends Controller
             }
         ])
         ->where('is_published', true)
-        ->select('id', 'name', 'address','category', 'distance_to_kariadi', 'whatsapp', 'google_maps_link', 'facilities', 'description', 'images');
+        ->select('id', 'name', 'address', 'distance_to_kariadi', 'whatsapp', 'google_maps_link', 'facilities', 'description', 'images', 'category');
 
         // Search functionality
         if ($request->has('search') && !empty($request->search)) {
@@ -117,6 +117,7 @@ class ProductController extends Controller
                 'thumbnail' => $thumbnail,
                 'starting_price' => (int) $startingPrice,
                 'whatsapp' => $product->whatsapp,
+                'category' => $product->category,
                 'google_maps_link' => $product->google_maps_link,
                 'facilities_preview' => $facilitiesPreview,
                 'status' => $status,
