@@ -22,7 +22,7 @@ class ProductController extends Controller
             }
         ])
         ->where('is_published', true)
-        ->select('id', 'name', 'address', 'distance_to_kariadi', 'whatsapp', 'google_maps_link', 'facilities', 'description', 'images');
+        ->select('id', 'name', 'address','category', 'distance_to_kariadi', 'whatsapp', 'google_maps_link', 'facilities', 'description', 'images');
 
         // Search functionality
         if ($request->has('search') && !empty($request->search)) {
